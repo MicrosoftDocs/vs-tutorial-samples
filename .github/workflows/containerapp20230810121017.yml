@@ -7,6 +7,8 @@ env:
   CONTAINER_APP_NAME: containerapp20230810121017
   CONTAINER_APP_RESOURCE_GROUP_NAME: webfrontend-container-app-1234
   CONTAINER_APP_CONTAINER_NAME: containerapp
+  DOCKER_FILEPATH_WEBAPI: docker/ComposeSample/WebApi/Dockerfile
+  DOCKER_FILEPATH_WEBFRONTEND: docker/ComposeSample/WebFrontend/Dockerfile
 jobs:
   WebApi_buildImageAndDeploy:
     runs-on: ubuntu-latest
@@ -26,7 +28,7 @@ jobs:
       with:
         push: true
         tags: ${{ env.CONTAINER_REGISTRY_LOGIN_SERVER }}/webapi:${{ github.sha }}
-        file: WebApi\Dockerfile
+        file: ${{ env.DOCKER_FILEPATH_WEBAPI }}
     - name: Azure login
       uses: azure/login@v1
       with:
@@ -61,7 +63,7 @@ jobs:
       with:
         push: true
         tags: ${{ env.CONTAINER_REGISTRY_LOGIN_SERVER }}/webfrontend:${{ github.sha }}
-        file: WebFrontEnd\Dockerfile
+        file: ${{ env.DOCKER_FILEPATH_WEBFRONTEND }}
     - name: Azure login
       uses: azure/login@v1
       with:
