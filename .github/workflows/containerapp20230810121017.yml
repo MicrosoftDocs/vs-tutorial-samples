@@ -41,7 +41,7 @@ jobs:
         inlineScript: >-
           az config set extension.use_dynamic_install=yes_without_prompt
 
-          az containerapp registry set --name ${{ env.CONTAINER_APP_NAME }} --resource-group ${{ env.CONTAINER_APP_RESOURCE_GROUP_NAME }} --server ${{ env.CONTAINER_REGISTRY_LOGIN_SERVER }} --username ${{ secrets.WEBAPI_USERNAME }} --password $${{ secrets.WEBAPI_PASSWORD }}
+          az containerapp registry set --name ${{ env.CONTAINER_APP_NAME }} --resource-group ${{ env.CONTAINER_APP_RESOURCE_GROUP_NAME }} --server ${{ env.CONTAINER_REGISTRY_LOGIN_SERVER }} --username ${{ secrets.REGISTRY20230810121555_USERNAME_6891 }} --password $${{ secrets.REGISTRY20230810121555_PASSWORD_6891 }}
 
           az containerapp update --name ${{ env.CONTAINER_APP_NAME }} --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} --resource-group ${{ env.CONTAINER_APP_RESOURCE_GROUP_NAME }} --image ${{ env.CONTAINER_REGISTRY_LOGIN_SERVER }}/webapi:${{ github.sha }}
     - name: Azure logout
