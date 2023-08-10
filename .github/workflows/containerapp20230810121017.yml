@@ -30,16 +30,18 @@ jobs:
         tags: ${{ env.CONTAINER_REGISTRY_LOGIN_SERVER }}/webapi:${{ github.sha }}
         file: ${{ env.DOCKER_FILEPATH_WEBAPI }}
     - name: Azure login
-      uses: azure/login@v1
+      uses: azure/CLI@v1
       with:
-        creds: ${{ secrets.containerapp20230810121017_SPN }}
+        inlineScript: |
+          az login --service-principal -u $${ secrets.WEBAPI_USERNAME }} -p ${{ secrets.WEBAPI_PASSWORD }} --tenant 72f988bf-86f1-41af-91ab-2d7cd011db47
+          az account list
     - name: Deploy to Azure container app
       uses: azure/CLI@v1
       with:
         inlineScript: >-
           az config set extension.use_dynamic_install=yes_without_prompt
 
-          az containerapp registry set --name ${{ env.CONTAINER_APP_NAME }} --resource-group ${{ env.CONTAINER_APP_RESOURCE_GROUP_NAME }} --server ${{ env.CONTAINER_REGISTRY_LOGIN_SERVER }} --username ${{ secrets.registry20230810121555_USERNAME_6891 }} --password ${{ secrets.registry20230810121555_PASSWORD_6891 }}
+          az containerapp registry set --name ${{ env.CONTAINER_APP_NAME }} --resource-group ${{ env.CONTAINER_APP_RESOURCE_GROUP_NAME }} --server ${{ env.CONTAINER_REGISTRY_LOGIN_SERVER }} --username ${{ secrets.REGISTRY20230810121555_USERNAME_6891 }} --password ${{ secrets.REGISTRY20230810121555_PASSWORD_6891 }}
 
           az containerapp update --name ${{ env.CONTAINER_APP_NAME }} --container-name ${{ env.CONTAINER_APP_CONTAINER_NAME }} --resource-group ${{ env.CONTAINER_APP_RESOURCE_GROUP_NAME }} --image ${{ env.CONTAINER_REGISTRY_LOGIN_SERVER }}/webapi:${{ github.sha }}
     - name: Azure logout
