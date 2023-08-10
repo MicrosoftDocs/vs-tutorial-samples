@@ -33,7 +33,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-          az login --service-principal -u $${ secrets.WEBAPI_USERNAME }} -p ${{ secrets.WEBAPI_PASSWORD }} --tenant 72f988bf-86f1-41af-91ab-2d7cd011db47
+          az login --service-principal -u ${{ secrets.WEBAPI_USERNAME }} -p ${{ secrets.WEBAPI_PASSWORD }} --tenant 72f988bf-86f1-41af-91ab-2d7cd011db47
           az account list
     - name: Deploy to Azure container app
       uses: azure/CLI@v1
