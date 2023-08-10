@@ -6,7 +6,7 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["docker/ComposeSample/WebApi/WebApi.csproj", "WebApi_build/"]
+COPY ["docker/ComposeSample/WebApi/", "WebApi_build/"]
 RUN dotnet restore "WebApi_build/WebApi.csproj"
 COPY . .
 WORKDIR "/src/WebApi_build"
