@@ -2,6 +2,7 @@ on:
   push:
     branches:
     - master
+
 env:
   CONTAINER_REGISTRY_LOGIN_SERVER: registry20230810121555.azurecr.io
   CONTAINER_APP_NAME: containerapp20230810121017
