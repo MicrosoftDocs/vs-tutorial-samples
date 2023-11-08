@@ -10,7 +10,6 @@
 using DslModeling = global::Microsoft.VisualStudio.Modeling;
 using DslDiagrams = global::Microsoft.VisualStudio.Modeling.Diagrams;
 using DslShell = global::Microsoft.VisualStudio.Modeling.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Microsoft.Example.Circuits.DslPackage
 {
@@ -27,8 +26,6 @@ namespace Microsoft.Example.Circuits.DslPackage
 		{
 		}
 	}
-
-
 
 	/// <summary>
 	/// Class that hosts the diagram surface in the Visual Studio document area.

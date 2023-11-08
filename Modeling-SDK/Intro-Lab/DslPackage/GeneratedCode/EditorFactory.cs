@@ -55,17 +55,9 @@ namespace Microsoft.Example.Circuits.DslPackage
 		protected override DslShell::ModelingDocView CreateDocView(DslShell::ModelingDocData docData, string physicalView, out string editorCaption)
 		{
 			// Create the view type supported by this editor.
-			editorCaption = "blah";
-
-      CircuitsDocView dv = new CircuitsDocView(docData, this.ServiceProvider);
-      /*foreach (ComponentModel cm in (docData as CircuitsDocData).ModelingDocStore.Store.ElementDirectory.FindElements<ComponentModel>())
-      {
-        editorCaption += cm.Name;
-      }
-      */
-      return dv;
-    }
-    
+			editorCaption = string.Empty;
+			return new CircuitsDocView(docData, this.ServiceProvider);
+		}
 	}
 }
 

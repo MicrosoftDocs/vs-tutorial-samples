@@ -7,25 +7,25 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Diagnostics;
+using System.Drawing.Design;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using VSShellInterop = global::Microsoft.VisualStudio.Shell.Interop;
 using VSShell = global::Microsoft.VisualStudio.Shell;
 using DslShell = global::Microsoft.VisualStudio.Modeling.Shell;
 using DslDesign = global::Microsoft.VisualStudio.Modeling.Design;
 using DslModeling = global::Microsoft.VisualStudio.Modeling;
-using VSTextTemplatingHost = global::Microsoft.VisualStudio.TextTemplating.VSHost;
-using System;
-using System.Diagnostics;
-using System.Drawing.Design;
-using System.Linq;
-using System.Windows.Forms;
-	
+
 namespace Microsoft.Example.Circuits.DslPackage
 {
 	/// <summary>
 	/// This class implements the VS package that integrates this DSL into Visual Studio.
 	/// </summary>
-	[VSShell::DefaultRegistryRoot("Software\\Microsoft\\VisualStudio\\10.0")]
-	[VSShell::PackageRegistration(RegisterUsing = VSShell::RegistrationMethod.Assembly, UseManagedResourcesOnly = true)]
+	[VSShell::PackageRegistration(RegisterUsing = VSShell::RegistrationMethod.Assembly, UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
 	[VSShell::ProvideToolWindow(typeof(CircuitsExplorerToolWindow), MultiInstances = false, Style = VSShell::VsDockStyle.Tabbed, Orientation = VSShell::ToolWindowOrientation.Right, Window = "{3AE79031-E1BC-11D0-8F78-00A0C9110057}")]
 	[VSShell::ProvideToolWindowVisibility(typeof(CircuitsExplorerToolWindow), Constants.CircuitsEditorFactoryId)]
 	[VSShell::ProvideStaticToolboxGroup("@Circuit DiagramsToolboxTab;Microsoft.Example.Circuits.Dsl.dll", "Microsoft.Example.Circuits.DslPackage.Circuit DiagramsToolboxTab")]
@@ -35,51 +35,59 @@ namespace Microsoft.Example.Circuits.DslPackage
 					"CF_TOOLBOXITEMCONTAINER,CF_TOOLBOXITEMCONTAINER_HASH,CF_TOOLBOXITEMCONTAINER_CONTENTS", 
 					"CreateComponentF1Keyword", 
 					"@ResistorToolboxBitmap;Microsoft.Example.Circuits.Dsl.dll", 
-					0xff00ff)]
+					0xff00ff,
+					Index = 0)]
 	[VSShell::ProvideStaticToolboxItem("Microsoft.Example.Circuits.DslPackage.Circuit DiagramsToolboxTab",
 					"@WireToolboxItem;Microsoft.Example.Circuits.Dsl.dll", 
 					"Microsoft.Example.Circuits.DslPackage.WireToolboxItem", 
 					"CF_TOOLBOXITEMCONTAINER,CF_TOOLBOXITEMCONTAINER_HASH,CF_TOOLBOXITEMCONTAINER_CONTENTS", 
 					"ConnectAssociationF1Keyword", 
 					"@WireToolboxBitmap;Microsoft.Example.Circuits.Dsl.dll", 
-					0xff00ff)]
+					0xff00ff,
+					Index = 1)]
 	[VSShell::ProvideStaticToolboxItem("Microsoft.Example.Circuits.DslPackage.Circuit DiagramsToolboxTab",
 					"@CommentToolboxItem;Microsoft.Example.Circuits.Dsl.dll", 
 					"Microsoft.Example.Circuits.DslPackage.CommentToolboxItem", 
 					"CF_TOOLBOXITEMCONTAINER,CF_TOOLBOXITEMCONTAINER_HASH,CF_TOOLBOXITEMCONTAINER_CONTENTS", 
 					"ConnectCommentF1Keyword", 
 					"@CommentToolboxBitmap;Microsoft.Example.Circuits.Dsl.dll", 
-					0xff00ff)]
+					0xff00ff,
+					Index = 2)]
 	[VSShell::ProvideStaticToolboxItem("Microsoft.Example.Circuits.DslPackage.Circuit DiagramsToolboxTab",
 					"@CommentConnectorToolboxItem;Microsoft.Example.Circuits.Dsl.dll", 
 					"Microsoft.Example.Circuits.DslPackage.CommentConnectorToolboxItem", 
 					"CF_TOOLBOXITEMCONTAINER,CF_TOOLBOXITEMCONTAINER_HASH,CF_TOOLBOXITEMCONTAINER_CONTENTS", 
 					"ConnectCommentsReferenceTypesF1Keyword", 
 					"@CommentConnectorToolboxBitmap;Microsoft.Example.Circuits.Dsl.dll", 
-					0xff00ff)]
+					0xff00ff,
+					Index = 3)]
 	[VSShell::ProvideStaticToolboxItem("Microsoft.Example.Circuits.DslPackage.Circuit DiagramsToolboxTab",
 					"@JunctionToolboxItem;Microsoft.Example.Circuits.Dsl.dll", 
 					"Microsoft.Example.Circuits.DslPackage.JunctionToolboxItem", 
 					"CF_TOOLBOXITEMCONTAINER,CF_TOOLBOXITEMCONTAINER_HASH,CF_TOOLBOXITEMCONTAINER_CONTENTS", 
 					"Junction", 
 					"@JunctionToolboxBitmap;Microsoft.Example.Circuits.Dsl.dll", 
-					0xff00ff)]
+					0xff00ff,
+					Index = 4)]
 	[VSShell::ProvideStaticToolboxItem("Microsoft.Example.Circuits.DslPackage.Circuit DiagramsToolboxTab",
 					"@TransistorToolToolboxItem;Microsoft.Example.Circuits.Dsl.dll", 
 					"Microsoft.Example.Circuits.DslPackage.TransistorToolToolboxItem", 
 					"CF_TOOLBOXITEMCONTAINER,CF_TOOLBOXITEMCONTAINER_HASH,CF_TOOLBOXITEMCONTAINER_CONTENTS", 
 					"TransistorTool", 
 					"@TransistorToolToolboxBitmap;Microsoft.Example.Circuits.Dsl.dll", 
-					0xff00ff)]
+					0xff00ff,
+					Index = 5)]
 	[VSShell::ProvideStaticToolboxItem("Microsoft.Example.Circuits.DslPackage.Circuit DiagramsToolboxTab",
 					"@CapacitorToolToolboxItem;Microsoft.Example.Circuits.Dsl.dll", 
 					"Microsoft.Example.Circuits.DslPackage.CapacitorToolToolboxItem", 
 					"CF_TOOLBOXITEMCONTAINER,CF_TOOLBOXITEMCONTAINER_HASH,CF_TOOLBOXITEMCONTAINER_CONTENTS", 
 					"CapacitorTool", 
 					"@CapacitorToolToolboxBitmap;Microsoft.Example.Circuits.Dsl.dll", 
-					0xff00ff)]
+					0xff00ff,
+					Index = 6)]
 	[VSShell::ProvideEditorFactory(typeof(CircuitsEditorFactory), 103, TrustLevel = VSShellInterop::__VSEDITORTRUSTLEVEL.ETL_AlwaysTrusted)]
 	[VSShell::ProvideEditorExtension(typeof(CircuitsEditorFactory), "." + Constants.DesignerFileExtension, 50)]
+	[VSShell::ProvideEditorLogicalView(typeof(CircuitsEditorFactory), "{7651A702-06E5-11D1-8EBD-00A0C90F26EA}")] // Designer logical view GUID i.e. VSConstants.LOGVIEWID_Designer
 	[DslShell::ProvideRelatedFile("." + Constants.DesignerFileExtension, Constants.DefaultDiagramExtension,
 		ProjectSystem = DslShell::ProvideRelatedFileAttribute.CSharpProjectGuid,
 		FileOptions = DslShell::RelatedFileType.FileName)]
@@ -90,16 +98,17 @@ namespace Microsoft.Example.Circuits.DslPackage
 	[global::System.Runtime.InteropServices.ComVisible(true)]
 	[DslShell::ProvideBindingPath]
 	[DslShell::ProvideXmlEditorChooserBlockSxSWithXmlEditor(@"Circuits", typeof(CircuitsEditorFactory))]
-	internal abstract partial class CircuitsPackageBase : DslShell::ModelingPackage
+
+	internal abstract partial class CircuitsPackageBase : DslShell::AsyncModelingPackage
 	{
 		protected global::Microsoft.Example.Circuits.CircuitsToolboxHelper toolboxHelper;	
 		
 		/// <summary>
 		/// Initialization method called by the package base class when this package is loaded.
 		/// </summary>
-		protected override void Initialize()
+		protected async override System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<VSShell.ServiceProgressData> progress)
 		{
-			base.Initialize();
+			await base.InitializeAsync(cancellationToken, progress);
 
 			// Register the editor factory used to create the DSL editor.
 			this.RegisterEditorFactory(new CircuitsEditorFactory(this));
@@ -109,21 +118,28 @@ namespace Microsoft.Example.Circuits.DslPackage
 
 			// Create the command set that handles menu commands provided by this package.
 			CircuitsCommandSet commandSet = new CircuitsCommandSet(this);
-			commandSet.Initialize();
+			await commandSet.InitializeAsync(cancellationToken);
 			
 			// Create the command set that handles cut/copy/paste commands provided by this package.
 			CircuitsClipboardCommandSet clipboardCommandSet = new CircuitsClipboardCommandSet(this);
-			clipboardCommandSet.Initialize();
+			await clipboardCommandSet.InitializeAsync(cancellationToken);
 			
 			// Register the model explorer tool window for this DSL.
 			this.AddToolWindow(typeof(CircuitsExplorerToolWindow));
+
+			if (cancellationToken.IsCancellationRequested)
+			{
+				return;
+			}
+
+			await JoinableTaskFactory.SwitchToMainThreadAsync();
 
 			// Initialize Extension Registars
 			// this is a partial method call
 			this.InitializeExtensions();
 
 			// Add dynamic toolbox items
-			this.SetupDynamicToolbox();
+			await this.SetupDynamicToolboxAsync(cancellationToken);
 		}
 
 		/// <summary>
@@ -142,7 +158,7 @@ namespace Microsoft.Example.Circuits.DslPackage
 				Debug.Assert(toolboxHelper != null, "Toolbox helper is not initialized");
 				return toolboxHelper.CreateToolboxItems();
 			}
-			catch(global::System.Exception e)
+			catch (global::System.Exception e)
 			{
 				global::System.Diagnostics.Debug.Fail("Exception thrown during toolbox item creation.  This may result in Package Load Failure:\r\n\r\n" + e);
 				throw;
@@ -163,8 +179,17 @@ namespace Microsoft.Example.Circuits.DslPackage
 			// Retrieve the specified ToolboxItem from the DSL
 			return toolboxHelper.GetToolboxItemData(itemId, format);
 		}
-	}
 
+		public override VSShellInterop::IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(Guid toolWindowType)
+		{
+			if (toolWindowType == typeof(CircuitsExplorerToolWindow).GUID)
+			{
+				return this;
+			}
+
+			return base.GetAsyncToolWindowFactory(toolWindowType);
+		}
+	}
 }
 
 //

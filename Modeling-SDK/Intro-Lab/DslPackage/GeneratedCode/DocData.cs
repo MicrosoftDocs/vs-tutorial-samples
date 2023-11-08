@@ -13,34 +13,14 @@ using DslValidation = global::Microsoft.VisualStudio.Modeling.Validation;
 using DslDiagrams = global::Microsoft.VisualStudio.Modeling.Diagrams;
 using VSShellInterop = global::Microsoft.VisualStudio.Shell.Interop;
 using global::System.Linq;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Microsoft.Example.Circuits.DslPackage
 {
-  
 	/// <summary>
 	/// Double-derived class to allow easier code customization.
 	/// </summary>
 	internal partial class CircuitsDocData : CircuitsDocDataBase
 	{
-    protected override void Load(string fileName, bool isReload)
-    {
-      base.Load(fileName, isReload);
-      IVsRunningDocumentTable rdt = this.ServiceProvider.GetService(typeof(IVsRunningDocumentTable)) as IVsRunningDocumentTable;
-      uint a, b, c, d, e, f, g, h; string x; IVsHierarchy pp; System.IntPtr docptr;
-      rdt.GetDocumentInfo(this.Cookie, out a, out b, out c, out x, out pp, out d, out docptr);
-      
-      IVsWindowFrame frame = this.ServiceProvider.GetService(typeof(IVsWindowFrame)) as IVsWindowFrame;
-      if (frame != null)
-      {
-        frame.SetProperty((int)__VSFPROPID.VSFPROPID_EditorCaption, "bloogle");
-      } 
-
-    }
-    public override int SetUntitledDocPath(string fileName)
-    {
-      return base.SetUntitledDocPath(fileName);
-    }
 		/// <summary>
 		/// Constructs a new CircuitsDocData.
 		/// </summary>
