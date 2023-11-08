@@ -119,6 +119,15 @@ namespace CompanyName.LanguageSm
 
 				return;
 			}
+		
+			// Sdk workaround to runtime bug #879350 (DSL: can't copy and paste a MEL that has a MEX). Avoid MergeRelate on ModelElementExtension
+			// during a "Paste".
+			if (sourceElement is DslModeling::ExtensionElement
+				&& sourceElement.Store.TransactionManager.CurrentTransaction.TopLevelTransaction.Context.ContextInfo.ContainsKey("{9DAFD42A-DC0E-4d78-8C3F-8266B2CF8B33}"))
+			{
+				return;
+			}
+		
 			// Fall through to base class if this class hasn't handled the merge.
 			base.MergeRelate(sourceElement, elementGroup);
 		}

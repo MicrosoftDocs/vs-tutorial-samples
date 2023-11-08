@@ -7,25 +7,25 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Diagnostics;
+using System.Drawing.Design;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using VSShellInterop = global::Microsoft.VisualStudio.Shell.Interop;
 using VSShell = global::Microsoft.VisualStudio.Shell;
 using DslShell = global::Microsoft.VisualStudio.Modeling.Shell;
 using DslDesign = global::Microsoft.VisualStudio.Modeling.Design;
 using DslModeling = global::Microsoft.VisualStudio.Modeling;
-using VSTextTemplatingHost = global::Microsoft.VisualStudio.TextTemplating.VSHost;
-using System;
-using System.Diagnostics;
-using System.Drawing.Design;
-using System.Linq;
-using System.Windows.Forms;
-	
+
 namespace CompanyName.LanguageSm
 {
 	/// <summary>
 	/// This class implements the VS package that integrates this DSL into Visual Studio.
 	/// </summary>
-	[VSShell::DefaultRegistryRoot("Software\\Microsoft\\VisualStudio\\10.0")]
-	[VSShell::PackageRegistration(RegisterUsing = VSShell::RegistrationMethod.Assembly, UseManagedResourcesOnly = true)]
+	[VSShell::PackageRegistration(RegisterUsing = VSShell::RegistrationMethod.Assembly, UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
 	[VSShell::ProvideToolWindow(typeof(LanguageSmExplorerToolWindow), MultiInstances = false, Style = VSShell::VsDockStyle.Tabbed, Orientation = VSShell::ToolWindowOrientation.Right, Window = "{3AE79031-E1BC-11D0-8F78-00A0C9110057}")]
 	[VSShell::ProvideToolWindowVisibility(typeof(LanguageSmExplorerToolWindow), Constants.LanguageSmEditorFactoryId)]
 	[VSShell::ProvideStaticToolboxGroup("@LanguageSmToolboxTab;CompanyName.LanguageSm.Dsl.dll", "CompanyName.LanguageSm.LanguageSmToolboxTab")]
@@ -35,16 +35,19 @@ namespace CompanyName.LanguageSm
 					"CF_TOOLBOXITEMCONTAINER,CF_TOOLBOXITEMCONTAINER_HASH,CF_TOOLBOXITEMCONTAINER_CONTENTS", 
 					"CreateExampleClassF1Keyword", 
 					"@ExampleElementToolboxBitmap;CompanyName.LanguageSm.Dsl.dll", 
-					0xff00ff)]
+					0xff00ff,
+					Index = 0)]
 	[VSShell::ProvideStaticToolboxItem("CompanyName.LanguageSm.LanguageSmToolboxTab",
 					"@ExampleRelationshipToolboxItem;CompanyName.LanguageSm.Dsl.dll", 
 					"CompanyName.LanguageSm.ExampleRelationshipToolboxItem", 
 					"CF_TOOLBOXITEMCONTAINER,CF_TOOLBOXITEMCONTAINER_HASH,CF_TOOLBOXITEMCONTAINER_CONTENTS", 
 					"ConnectExampleRelationF1Keyword", 
 					"@ExampleRelationshipToolboxBitmap;CompanyName.LanguageSm.Dsl.dll", 
-					0xff00ff)]
+					0xff00ff,
+					Index = 1)]
 	[VSShell::ProvideEditorFactory(typeof(LanguageSmEditorFactory), 103, TrustLevel = VSShellInterop::__VSEDITORTRUSTLEVEL.ETL_AlwaysTrusted)]
 	[VSShell::ProvideEditorExtension(typeof(LanguageSmEditorFactory), "." + Constants.DesignerFileExtension, 50)]
+	[VSShell::ProvideEditorLogicalView(typeof(LanguageSmEditorFactory), "{7651A702-06E5-11D1-8EBD-00A0C90F26EA}")] // Designer logical view GUID i.e. VSConstants.LOGVIEWID_Designer
 	[DslShell::ProvideRelatedFile("." + Constants.DesignerFileExtension, Constants.DefaultDiagramExtension,
 		ProjectSystem = DslShell::ProvideRelatedFileAttribute.CSharpProjectGuid,
 		FileOptions = DslShell::RelatedFileType.FileName)]
@@ -55,16 +58,17 @@ namespace CompanyName.LanguageSm
 	[global::System.Runtime.InteropServices.ComVisible(true)]
 	[DslShell::ProvideBindingPath]
 	[DslShell::ProvideXmlEditorChooserBlockSxSWithXmlEditor(@"LanguageSm", typeof(LanguageSmEditorFactory))]
-	internal abstract partial class LanguageSmPackageBase : DslShell::ModelingPackage
+
+	internal abstract partial class LanguageSmPackageBase : DslShell::AsyncModelingPackage
 	{
 		protected global::CompanyName.LanguageSm.LanguageSmToolboxHelper toolboxHelper;	
 		
 		/// <summary>
 		/// Initialization method called by the package base class when this package is loaded.
 		/// </summary>
-		protected override void Initialize()
+		protected async override System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<VSShell.ServiceProgressData> progress)
 		{
-			base.Initialize();
+			await base.InitializeAsync(cancellationToken, progress);
 
 			// Register the editor factory used to create the DSL editor.
 			this.RegisterEditorFactory(new LanguageSmEditorFactory(this));
@@ -74,21 +78,28 @@ namespace CompanyName.LanguageSm
 
 			// Create the command set that handles menu commands provided by this package.
 			LanguageSmCommandSet commandSet = new LanguageSmCommandSet(this);
-			commandSet.Initialize();
+			await commandSet.InitializeAsync(cancellationToken);
 			
 			// Create the command set that handles cut/copy/paste commands provided by this package.
 			LanguageSmClipboardCommandSet clipboardCommandSet = new LanguageSmClipboardCommandSet(this);
-			clipboardCommandSet.Initialize();
+			await clipboardCommandSet.InitializeAsync(cancellationToken);
 			
 			// Register the model explorer tool window for this DSL.
 			this.AddToolWindow(typeof(LanguageSmExplorerToolWindow));
+
+			if (cancellationToken.IsCancellationRequested)
+			{
+				return;
+			}
+
+			await JoinableTaskFactory.SwitchToMainThreadAsync();
 
 			// Initialize Extension Registars
 			// this is a partial method call
 			this.InitializeExtensions();
 
 			// Add dynamic toolbox items
-			this.SetupDynamicToolbox();
+			await this.SetupDynamicToolboxAsync(cancellationToken);
 		}
 
 		/// <summary>
@@ -107,7 +118,7 @@ namespace CompanyName.LanguageSm
 				Debug.Assert(toolboxHelper != null, "Toolbox helper is not initialized");
 				return toolboxHelper.CreateToolboxItems();
 			}
-			catch(global::System.Exception e)
+			catch (global::System.Exception e)
 			{
 				global::System.Diagnostics.Debug.Fail("Exception thrown during toolbox item creation.  This may result in Package Load Failure:\r\n\r\n" + e);
 				throw;
@@ -128,8 +139,17 @@ namespace CompanyName.LanguageSm
 			// Retrieve the specified ToolboxItem from the DSL
 			return toolboxHelper.GetToolboxItemData(itemId, format);
 		}
-	}
 
+		public override VSShellInterop::IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(Guid toolWindowType)
+		{
+			if (toolWindowType == typeof(LanguageSmExplorerToolWindow).GUID)
+			{
+				return this;
+			}
+
+			return base.GetAsyncToolWindowFactory(toolWindowType);
+		}
+	}
 }
 
 //

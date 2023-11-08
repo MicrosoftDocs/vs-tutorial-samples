@@ -108,7 +108,7 @@ namespace CompanyName.LanguageSm
 			get
 			{
 				LanguageSmExplorerToolWindow explorerWindow = null;
-				DslShell::ModelingPackage package = this.ServiceProvider.GetService(typeof(VSShell::Package)) as DslShell::ModelingPackage;
+				DslShell::AsyncModelingPackage package = this.ServiceProvider.GetService(typeof(VSShell::AsyncPackage)) as DslShell::AsyncModelingPackage;
 
 				if (package != null)
 				{
