@@ -11,7 +11,7 @@ namespace CalculatorProgram
         {
             bool endApp = false;
             // Display title as the C# console calculator app.
-            Console.WriteLine("Console Calculator in C#\r");
+            Console.WriteLine("Welcome to Console Calculator in C#\r");
             Console.WriteLine("------------------------\n");
 
             Calculator calculator = new Calculator();
