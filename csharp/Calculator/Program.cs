@@ -1,39 +1,9 @@
+using CalculatorLibrary;
 using System;
+using System.Text.RegularExpressions;
 
-namespace Calculator
+namespace CalculatorProgram
 {
-    class Calculator
-    {
-        public static double DoOperation(double num1, double num2, string op)
-        {
-            double result = double.NaN; // Default value is "not-a-number" which we use if an operation, such as division, could result in an error.
-
-            // Use a switch statement to do the math.
-            switch (op)
-            {
-                case "a":
-                    result = num1 + num2;
-                    break;
-                case "s":
-                    result = num1 - num2;
-                    break;
-                case "m":
-                    result = num1 * num2;
-                    break;
-                case "d":
-                    // Ask the user to enter a non-zero divisor.
-                    if (num2 != 0)
-                    {
-                        result = num1 / num2;
-                    }
-                    break;
-                // Return text for an incorrect option entry.
-                default:
-                    break;
-            }
-            return result;
-        }
-    }
 
     class Program
     {
@@ -44,11 +14,12 @@ namespace Calculator
             Console.WriteLine("Console Calculator in C#\r");
             Console.WriteLine("------------------------\n");
 
+            Calculator calculator = new Calculator();
             while (!endApp)
             {
                 // Declare variables and set to empty.
-                string numInput1 = "";
-                string numInput2 = "";
+                string? numInput1 = "";
+                string? numInput2 = "";
                 double result = 0;
 
                 // Ask the user to type the first number.
@@ -81,22 +52,29 @@ namespace Calculator
                 Console.WriteLine("\td - Divide");
                 Console.Write("Your option? ");
 
-                string op = Console.ReadLine();
+                string? op = Console.ReadLine();
 
-                try
+                // Validate input
+                if (op == null || ! Regex.IsMatch(op, "[a|s|m|d]"))
                 {
-                    result = Calculator.DoOperation(cleanNum1, cleanNum2, op);
-                    if (double.IsNaN(result))
+                    Console.WriteLine("Error: Unrecognized input.");
+                }
+                else
+                { 
+                    try
                     {
-                        Console.WriteLine("This operation will result in a mathematical error.\n");
+                        result = calculator.DoOperation(cleanNum1, cleanNum2, op);
+                        if (double.IsNaN(result))
+                        {
+                            Console.WriteLine("This operation will result in a mathematical error.\n");
+                        }
+                        else Console.WriteLine("Your result: {0:0.##}\n", result);
                     }
-                    else Console.WriteLine("Your result: {0:0.##}\n", result);
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Oh no! An exception occurred trying to do the math.\n - Details: " + e.Message);
+                    }
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Oh no! An exception occurred trying to do the math.\n - Details: " + e.Message);
-                }
-
                 Console.WriteLine("------------------------\n");
 
                 // Wait for the user to respond before closing.
