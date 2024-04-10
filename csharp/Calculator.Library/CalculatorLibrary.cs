@@ -29,6 +29,7 @@ namespace CalculatorLibrary
                     result = num1 - num2;
                     Trace.WriteLine(String.Format("{0} - {1} = {2}", num1, num2, result));
                     break;
+
                 case "m":
                     result = num1 * num2;
                     Trace.WriteLine(String.Format("{0} * {1} = {2}", num1, num2, result));
