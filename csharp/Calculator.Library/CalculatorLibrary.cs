@@ -10,6 +10,7 @@ namespace CalculatorLibrary
             StreamWriter logFile = File.CreateText("calculator.log");
             Trace.Listeners.Add(new TextWriterTraceListener(logFile));
             Trace.AutoFlush = true;
+            Trace.Write("Testing");
             Trace.WriteLine("Starting Calculator Log");
             Trace.WriteLine(String.Format("Started {0}", System.DateTime.Now.ToString()));
         }
