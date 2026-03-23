@@ -8,7 +8,7 @@ namespace Calculator
         {
             double result = double.NaN; // Default value is "not-a-number" which we use if an operation, such as division, could result in an error.
 
-            // Use a switch statement to do the math. TEST PR
+            // Use a switch statement to do the math.
             switch (op)
             {
                 case "a":
